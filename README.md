@@ -1,6 +1,6 @@
 # Pagination Module for Nest.js
 
-This is module for (nest.js)[https://nestjs.com/] framework.
+This is module for [nest.js](https://nestjs.com/) framework.
 
 ## Installation:
 
