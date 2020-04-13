@@ -4,7 +4,7 @@ This is module for (nest.js)[https://nestjs.com/] framework.
 
 ## Installation:
 
-`npm i --save konro1/nestjs-pagination-module`
+`npm i --save typeorm-paginator`
 
 ## Usage
 Import pagination into module:
