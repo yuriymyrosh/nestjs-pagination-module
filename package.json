@@ -1,5 +1,5 @@
 {
-  "name": "typeorm-paginator",
+  "name": "nest-pagination-module",
   "version": "1.0.0",
   "description": "Nest pagination module",
   "repository": {

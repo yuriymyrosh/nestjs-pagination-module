@@ -4,10 +4,10 @@ This is module for (nest.js)[https://nestjs.com/] framework.
 
 ## Installation:
 
-`npm i --save typeorm-paginator`
+`npm i --save nest-pagination-module`
 
 ## Usage
-Import pagination into module:
+Import pagination into module
 
 ```
 @Module({
