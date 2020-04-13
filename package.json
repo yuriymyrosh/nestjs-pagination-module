@@ -1,6 +1,6 @@
 {
   "name": "nest-pagination-module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nest pagination module",
   "repository": {
     "url": "git@github.com:Konro1/nest-pagination-module.git"
