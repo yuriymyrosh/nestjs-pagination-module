@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { SelectQueryBuilder, Repository } from 'typeorm';
+import {
+  SelectQueryBuilder,
+  Repository,
+  FindConditions,
+  FindManyOptions
+} from 'typeorm';
 import { PaginationOptions } from '../../interfaces/pagination.options';
 import { PaginationResponse } from '../../interfaces/pagination.response';
 
@@ -8,10 +13,10 @@ export const DAFAULT_TAKE_VALUE = 25;
 
 @Injectable()
 export class PaginationService {
-
   public async paginate<T>(
     repo: SelectQueryBuilder<T> | Repository<T>,
-    options: PaginationOptions
+    options: PaginationOptions,
+    findParams?: FindConditions<T> | FindManyOptions<T>
   ): Promise<PaginationResponse<T>> {
     let items = [];
     let total = 0;
@@ -19,7 +24,11 @@ export class PaginationService {
     if (repo instanceof SelectQueryBuilder) {
       [items, total] = await this._paginateQueryBuilder<T>(repo, options);
     } else {
-      [items, total] = await this._paginateRepository(repo, options);
+      [items, total] = await this._paginateRepository(
+        repo,
+        options,
+        findParams
+      );
     }
 
     return {
@@ -40,11 +49,13 @@ export class PaginationService {
 
   private async _paginateRepository<T>(
     repo: Repository<T>,
-    options: PaginationOptions
+    options: PaginationOptions,
+    findParams?: FindConditions<T> | FindManyOptions<T>
   ) {
     return repo.findAndCount({
       skip: this._getOffset(options),
-      take: options.limit
+      take: options.limit,
+      ...findParams
     });
   }
 

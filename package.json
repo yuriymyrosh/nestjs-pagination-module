@@ -1,11 +1,11 @@
 {
   "name": "nest-pagination-module",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Nest pagination module",
   "repository": {
     "url": "git@github.com:Konro1/nest-pagination-module.git"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "prepublish:npm": "npm run build",
@@ -19,7 +19,7 @@
     "paginate"
   ],
   "author": "Yurii Myrosh",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@nestjs/common": "^6.3.1",
     "@nestjs/core": "^6.3.1",
