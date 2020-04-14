@@ -1,6 +1,6 @@
 export interface PaginationOptions {
 
-  // current page
+  // page to fetch
   page: number;
 
   // limit per page

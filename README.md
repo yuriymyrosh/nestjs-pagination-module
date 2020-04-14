@@ -1,6 +1,10 @@
 # Pagination Module for Nest.js
 
-This is module for [nest.js](https://nestjs.com/) framework.
+This is module for [nest.js](https://nestjs.com/) framework that provides pagination for typeorm repositories and query builder.
+
+* [Installation](#installation)
+* [Usage](#usage)
+* [Response example](#response-example)
 
 ## Installation:
 
@@ -35,11 +39,40 @@ export class MyService {
 }
 ```
 
-### Use pagination whenever you need it:
+### Use pagination in service methods where you need it:
 
 ```ts
 public async findAllPaginated(options: PaginationOptions) {
   return this._paginationService.paginate<MyEntity>(this.repo, options);
+}
+```
+
+### PaginationOptions interface:
+
+```ts
+{
+  // page to fetch
+  page: number;
+
+  // limit per page
+  limit: number;
+
+  // @todo not implemented yet, route will be used in next/prev meta properties
+  route?: string;
+}
+```
+
+### Controller example
+
+```ts
+@Controller('/api/myendpoint')
+export class MyController {
+  constructor(protected readonly service: MyService) {}
+
+  @Get()
+  async getAll(@Query('page') page = 0, @Query('limit') limit = 25) {
+    this.service.findAllPaginated({ page, limit });
+  }
 }
 ```
 
