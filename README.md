@@ -1,5 +1,9 @@
 # Pagination Module for Nest.js
 
+[![Build Status](https://travis-ci.org/Konro1/nest-pagination-module.svg?branch=master)](https://travis-ci.org/Konro1/nest-pagination-module)
+![npm](https://img.shields.io/npm/dw/nest-pagination-module)
+![npm](https://img.shields.io/npm/v/nest-pagination-module)
+
 This is module for [nest.js](https://nestjs.com/) framework that provides pagination for typeorm repositories and query builder.
 
 * [Installation](#installation)
