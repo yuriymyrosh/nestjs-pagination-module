@@ -4,7 +4,7 @@ export interface PaginationOptions {
   page: number;
 
   // limit per page
-  limit: number;
+  limit?: number;
 
   // route to be used in next/prev meta properties
   route?: string;

@@ -3,78 +3,96 @@ import {
   SelectQueryBuilder,
   Repository,
   FindConditions,
-  FindManyOptions
+  FindManyOptions,
 } from 'typeorm';
 import { PaginationOptions } from '../../interfaces/pagination.options';
 import { PaginationResponse } from '../../interfaces/pagination.response';
 
-export const TAKE_LIMIT = 1000;
-export const DAFAULT_TAKE_VALUE = 25;
+export const MAX_LIMIT = 1000;
+export const DEFAULT_LIMIT = 25;
 
 @Injectable()
 export class PaginationService {
+  private _total: number;
+  private _options: PaginationOptions;
+
   public async paginate<T>(
     repo: SelectQueryBuilder<T> | Repository<T>,
     options: PaginationOptions,
-    findParams?: FindConditions<T> | FindManyOptions<T>
+    findParams?: FindConditions<T> | FindManyOptions<T>,
   ): Promise<PaginationResponse<T>> {
     let items = [];
     let total = 0;
+    this._options = this._prepareOptions(options);
 
     if (repo instanceof SelectQueryBuilder) {
-      [items, total] = await this._paginateQueryBuilder<T>(repo, options);
+      [items, total] = await this._paginateQueryBuilder<T>(repo);
     } else {
-      [items, total] = await this._paginateRepository(
-        repo,
-        options,
-        findParams
-      );
+      [items, total] = await this._paginateRepository(repo, findParams);
     }
+    this._total = total;
 
     return {
       items,
-      ...this._getPaginationMeta(options, total)
+      ...this._paginationMeta,
     };
   }
 
-  private async _paginateQueryBuilder<T>(
-    qb: SelectQueryBuilder<T>,
-    options: PaginationOptions
-  ) {
+  private _prepareOptions(options: PaginationOptions) {
+    let limit: number = options.limit || DEFAULT_LIMIT;
+
+    if (options.limit > MAX_LIMIT) {
+      limit = MAX_LIMIT;
+    }
+
+    return {
+      ...options,
+      limit,
+      page: options.page < 1 ? 1 : options.page,
+    };
+  }
+
+  private async _paginateQueryBuilder<T>(qb: SelectQueryBuilder<T>) {
     return qb
-      .limit(options.limit)
-      .offset(this._getOffset(options))
+      .limit(this._options.limit)
+      .offset(this._offset)
       .getManyAndCount();
   }
 
   private async _paginateRepository<T>(
     repo: Repository<T>,
-    options: PaginationOptions,
-    findParams?: FindConditions<T> | FindManyOptions<T>
+    findParams?: FindConditions<T> | FindManyOptions<T>,
   ) {
     return repo.findAndCount({
-      skip: this._getOffset(options),
-      take: options.limit,
-      ...findParams
+      skip: this._offset,
+      take: this._options.limit,
+      ...findParams,
     });
   }
 
-  private _getOffset(options: PaginationOptions) {
-    if (options.page < 1) {
+  private get _offset() {
+    if (this._options.page < 1) {
       return 0;
     }
 
-    return (options.page - 1) * options.limit;
+    return (this._options.page - 1) * this._options.limit;
   }
 
-  private _getPaginationMeta(options: PaginationOptions, total: number) {
+  private get _nextUrl() {
+    return this._options.route ? '' : undefined;
+  }
+  private get _prevUrl() {
+    return this._options.route ? '' : undefined;
+  }
+
+  private get _paginationMeta() {
     return {
-      page: options.page || 1,
-      limit: options.limit,
-      totalItems: total,
-      pageCount: Math.ceil(total / options.limit),
-      next: '',
-      previous: ''
+      page: this._options.page || 1,
+      limit: this._options.limit,
+      totalItems: this._total,
+      pageCount: Math.ceil(this._total / this._options.limit),
+      next: this._nextUrl,
+      previous: this._prevUrl,
     };
   }
 }
