@@ -1,10 +1,23 @@
 # Pagination Module for Nest.js
 
+[![Build Status](https://travis-ci.org/Konro1/nest-pagination-module.svg?branch=master)](https://travis-ci.org/Konro1/nest-pagination-module)
+![npm](https://img.shields.io/npm/dw/nest-pagination-module)
+![npm](https://img.shields.io/npm/v/nest-pagination-module)
+
 This is module for [nest.js](https://nestjs.com/) framework that provides pagination for typeorm repositories and query builder.
 
+* [Requirements](#requirements)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Response example](#response-example)
+
+## Requirements
+
+|   |   |
+|---|:-:|
+| node  | > 10 |
+| nestJs | > 6.0.0  |
+| typeorm | ^0.2.22 |
 
 ## Installation:
 
@@ -57,8 +70,8 @@ public async findAllPaginated(options: PaginationOptions) {
   // limit per page
   limit: number;
 
-  // @todo not implemented yet, route will be used in next/prev meta properties
-  route?: string;
+  // express request will be used in next/prev meta properties
+  request?: Request;
 }
 ```
 
@@ -73,6 +86,37 @@ export class MyController {
   async getAll(@Query('page') page = 0, @Query('limit') limit = 25) {
     this.service.findAllPaginated({ page, limit });
   }
+}
+```
+
+### Links
+
+In order to receive links in response, you should provide express request object to pagination options.
+
+Inject request into Controller method:
+```ts
+@Get()
+async getAll(
+  @Req() request: Request,
+  @Query('page') page = 0,
+  @Query('limit') limit = 25) {
+  this.service.findAllPaginated({ page, limit });
+}
+```
+Pass this request into service
+
+```ts
+this.paginationService.paginate({
+  page: 1,
+  limit: 10,
+  request
+})
+```
+It will build next/previous pages links and return them in response. If there no previous or next pages you will receive `null` in response object.
+```JSON
+{
+  "next": "/api/myendpoint?page=2&limit=25",
+  "previous": null,
 }
 ```
 
@@ -96,7 +140,7 @@ export class MyController {
   "limit": 25,
   "totalItems": 100,
   "pageCount": 4,
-  "next": "",
-  "previous": "",
+  "next": "/api/myendpoint?page=2&limit=25",
+  "previous": null,
 }
 ```

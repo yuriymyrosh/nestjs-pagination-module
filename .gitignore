@@ -11,7 +11,7 @@ npm-debug.log
 .DS_Store
 
 # tests
-/coverage
+/test/coverage
 /.nyc_output
 
 # source
