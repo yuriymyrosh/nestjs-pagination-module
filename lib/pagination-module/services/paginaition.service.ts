@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { PaginationOptions } from '../../interfaces/pagination.options';
 import { PaginationResponse } from '../../interfaces/pagination.response';
+import * as url from 'url';
 
 export const MAX_LIMIT = 1000;
 export const DEFAULT_LIMIT = 25;
@@ -79,10 +80,53 @@ export class PaginationService {
   }
 
   private get _nextUrl() {
-    return this._options.route ? '' : undefined;
+    if (!this._options.request) {
+      return;
+    }
+
+    if (this._nextPage) {
+      return this._builUrl(this._nextPage);
+    }
+
+    return null;
   }
+
   private get _prevUrl() {
-    return this._options.route ? '' : undefined;
+    if (!this._options.request) {
+      return;
+    }
+
+    if (this._options.page > 1) {
+      return this._builUrl(this._options.page - 1);
+    }
+
+    return null;
+  }
+
+  private get _nextPage() {
+    const nextPage = this._options.page + 1;
+    if (nextPage <= this._pageCount) {
+      return nextPage;
+    }
+
+    return null;
+  }
+
+  private _builUrl(page) {
+    const { query } = this._options.request;
+
+    query.page = '' + page;
+    query.limit = '' + this._options.limit;
+    const queryString = Object.keys(query)
+      .map((key) => key + '=' + query[key])
+      .join('&');
+    const { pathname } = url.parse(this._options.request.url);
+
+    return `${pathname}?${queryString}`;
+  }
+
+  private get _pageCount() {
+    return Math.ceil(this._total / this._options.limit);
   }
 
   private get _paginationMeta() {
@@ -90,7 +134,7 @@ export class PaginationService {
       page: this._options.page || 1,
       limit: this._options.limit,
       totalItems: this._total,
-      pageCount: Math.ceil(this._total / this._options.limit),
+      pageCount: this._pageCount,
       next: this._nextUrl,
       previous: this._prevUrl,
     };

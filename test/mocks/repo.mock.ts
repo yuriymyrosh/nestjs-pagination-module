@@ -106,6 +106,6 @@ export const repoMock = {
   findAndCount: jest.fn((options: FindManyOptions<any>) => {
     const found = _mockData.slice(options.skip, options.skip + options.take);
 
-    return [found, found.length];
+    return [found, _mockData.length];
   }),
 };

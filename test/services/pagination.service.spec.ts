@@ -76,4 +76,86 @@ describe('pagination service tests', () => {
     expect(response).toBeTruthy();
     expect(response.page).toBe(1);
   });
+
+  it('should return links when request is provided', async () => {
+    const response = await service.paginate(repoMock as any, {
+      page: 0,
+      request: {
+        query: {},
+        url: '/api/test',
+      } as any,
+    });
+
+    expect(response).toBeTruthy();
+    expect(response.next).toEqual(`/api/test?page=2&limit=${DEFAULT_LIMIT}`);
+  });
+
+  it('should return links for first page without previous', async () => {
+    const response = await service.paginate(repoMock as any, {
+      page: 0,
+      request: {
+        query: {},
+        url: '/api/test',
+      } as any,
+    });
+
+    expect(response).toBeTruthy();
+    expect(response.next).toEqual(`/api/test?page=2&limit=${DEFAULT_LIMIT}`);
+    expect(response.previous).toEqual(null);
+  });
+
+  it('should return links for second page', async () => {
+    const response = await service.paginate(repoMock as any, {
+      page: 2,
+      limit: 10,
+      request: {
+        query: {},
+        url: '/api/test',
+      } as any,
+    });
+
+    expect(response).toBeTruthy();
+    expect(response.next).toEqual(`/api/test?page=3&limit=10`);
+    expect(response.previous).toEqual(`/api/test?page=1&limit=10`);
+  });
+
+  it('should return links for last page without next', async () => {
+    const response = await service.paginate(repoMock as any, {
+      page: 2,
+      limit: 30,
+      request: {
+        query: {},
+        url: '/api/test',
+      } as any,
+    });
+
+    expect(response).toBeTruthy();
+    expect(response.totalItems).toBe(33);
+    expect(response.limit).toBe(30);
+    expect(response.page).toBe(2);
+    expect(response.pageCount).toBe(2);
+    expect(response.next).toEqual(null);
+    expect(response.previous).toEqual(`/api/test?page=1&limit=30`);
+  });
+
+  it('should return links and save query params', async () => {
+    const response = await service.paginate(repoMock as any, {
+      page: 2,
+      limit: 30,
+      request: {
+        query: {
+          sortBy: 'item'
+        },
+        url: '/api/test',
+      } as any,
+    });
+
+    expect(response).toBeTruthy();
+    expect(response.totalItems).toBe(33);
+    expect(response.limit).toBe(30);
+    expect(response.page).toBe(2);
+    expect(response.pageCount).toBe(2);
+    expect(response.next).toEqual(null);
+    expect(response.previous).toEqual(`/api/test?sortBy=item&page=1&limit=30`);
+  });
 });
