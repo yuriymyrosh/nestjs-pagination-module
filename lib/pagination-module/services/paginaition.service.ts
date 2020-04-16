@@ -131,10 +131,10 @@ export class PaginationService {
 
   private get _paginationMeta() {
     return {
-      page: this._options.page || 1,
-      limit: this._options.limit,
-      totalItems: this._total,
-      pageCount: this._pageCount,
+      page: +this._options.page || 1,
+      limit: +this._options.limit,
+      totalItems: +this._total,
+      pageCount: +this._pageCount,
       next: this._nextUrl,
       previous: this._prevUrl,
     };

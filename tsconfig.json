@@ -24,6 +24,7 @@
     "node_modules",
     "./**/*.spec.ts",
     "examples",
-    "lib/__tests__"
+    "lib/__tests__",
+    "test"
   ]
 }

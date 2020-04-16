@@ -1,6 +1,6 @@
 {
   "name": "nest-pagination-module",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Nest pagination module",
   "repository": {
     "url": "git@github.com:Konro1/nest-pagination-module.git"
@@ -39,7 +39,7 @@
     "typescript": "^3.2.4"
   },
   "peerDependencies": {
-    "@nestjs/common": "^6.x",
+    "@nestjs/common": "^6.x || ^7.x",
     "typeorm": "^0.2.22"
   }
 }
