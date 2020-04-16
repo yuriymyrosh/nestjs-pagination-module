@@ -15,14 +15,9 @@
     "rootDir": "lib",
     "baseUrl": "./",
     "outDir": "./dist",
-    "lib": [
-      "es2017"
-    ]
+    "lib": ["es2017"]
   },
-  "include": [
-    "*.ts",
-    "**/*.ts"
-  ],
+  "include": ["*.ts", "**/*.ts"],
   "exclude": [
     "./index.ts",
     "./index.d.ts",
