@@ -1,8 +1,8 @@
 # Pagination Module for Nest.js
 
 [![Build Status](https://travis-ci.org/Konro1/nest-pagination-module.svg?branch=master)](https://travis-ci.org/Konro1/nest-pagination-module)
-![npm](https://img.shields.io/npm/dw/nest-pagination-module)
-![npm](https://img.shields.io/npm/v/nest-pagination-module)
+[![npm](https://www.npmjs.com/package/nest-pagination-module)](https://img.shields.io/npm/dw/nest-pagination-module)
+[![npm](https://www.npmjs.com/package/nest-pagination-module)](https://img.shields.io/npm/v/nest-pagination-module)
 
 This is module for [nest.js](https://nestjs.com/) framework that provides pagination for typeorm repositories and query builder.
 
@@ -13,7 +13,7 @@ This is module for [nest.js](https://nestjs.com/) framework that provides pagina
 
 ## Requirements
 
-|   |   |
+| Dependency | version |
 |---|:-:|
 | node  | > 10 |
 | nestJs | > 6.0.0  |
@@ -113,7 +113,7 @@ this.paginationService.paginate({
 })
 ```
 It will build next/previous pages links and return them in response. If there no previous or next pages you will receive `null` in response object.
-```JSON
+```json
 {
   "next": "/api/myendpoint?page=2&limit=25",
   "previous": null,
