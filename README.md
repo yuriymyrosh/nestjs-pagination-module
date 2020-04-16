@@ -6,9 +6,18 @@
 
 This is module for [nest.js](https://nestjs.com/) framework that provides pagination for typeorm repositories and query builder.
 
+* [Requirements](#requirements)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Response example](#response-example)
+
+## Requirements
+
+|   |   |
+|---|:-:|
+| node  | > 10 |
+| nestJs | > 6.0.0  |
+| typeorm | ^0.2.22 |
 
 ## Installation:
 
