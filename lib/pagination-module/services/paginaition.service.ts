@@ -8,6 +8,7 @@ import {
 import { PaginationOptions } from '../../interfaces/pagination.options';
 import { PaginationResponse } from '../../interfaces/pagination.response';
 import * as url from 'url';
+import { isString } from 'util';
 
 export const MAX_LIMIT = 1000;
 export const DEFAULT_LIMIT = 25;
@@ -39,9 +40,14 @@ export class PaginationService {
     };
   }
 
-  private _prepareOptions(options: PaginationOptions) {
+  private _prepareOptions(options: PaginationOptions): PaginationOptions {
+    if (isString(options.page)) {
+      options.page = parseInt(options.page);
+    }
+    if (isString(options.limit)) {
+      options.limit = parseInt(options.limit);
+    }
     let limit: number = options.limit || DEFAULT_LIMIT;
-
     if (options.limit > MAX_LIMIT) {
       limit = MAX_LIMIT;
     }
