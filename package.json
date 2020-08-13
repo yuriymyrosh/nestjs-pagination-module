@@ -10,7 +10,8 @@
     "build": "tsc -p tsconfig.json",
     "prepublish:npm": "rimraf dist && npm run build",
     "publish:npm": "npm publish --access public",
-    "test": "jest --config jest.json"
+    "test": "jest --config jest.json",
+    "test:cov": "jest --config jest.json --coverage"
   },
   "keywords": [
     "nestjs",
